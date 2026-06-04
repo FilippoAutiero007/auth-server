@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "main": "index.js",
+  "engines": {
+    "node": "20.x"
+  },
+  "overrides": {
+    "bonjour-service": "1.1.1"
+  },
   "scripts": {
     "start": "node index.js"
   },
