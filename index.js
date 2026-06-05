@@ -255,7 +255,21 @@ app.get('/debug/devices-raw', async (req, res) => {
 })
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', pending: pendingLogins.size, completed: completedLogins.size })
+  res.json({
+    status: 'ok',
+    pending: pendingLogins.size,
+    completed: completedLogins.size,
+    version: 'v3-with-debug-2026-06-05',
+    fix: 'userApi.at set explicitly (commit a65987d+)',
+  })
+})
+
+app.get('/version', (req, res) => {
+  res.json({
+    version: 'v3-with-debug-2026-06-05',
+    features: ['debug_endpoint', 'explicit_at_fix'],
+    commit: 'a65987d+',
+  })
 })
 
 app.listen(PORT, () => {
