@@ -213,6 +213,7 @@ app.get('/devices', async (req, res) => {
     userApi.at = accessToken
 
     const result = await userApi.device.getAllThings()
+    console.log('[devices] raw result:', JSON.stringify(result))
     const things = result?.data?.thingList || []
     const devices = things
       .filter(t => t.itemType === 1 || t.itemType === 2)
@@ -221,6 +222,35 @@ app.get('/devices', async (req, res) => {
   } catch (err) {
     console.error('devices error:', err)
     res.status(500).json({ error: err.message })
+  }
+})
+
+app.get('/debug/devices-raw', async (req, res) => {
+  try {
+    const { accessToken, region } = req.query
+    if (!accessToken) {
+      return res.status(400).json({ error: 'accessToken richiesto' })
+    }
+
+    const userApi = new eWeLink.WebAPI({
+      appId: APP_ID,
+      appSecret: APP_SECRET,
+      region: region || 'eu',
+    })
+    userApi.at = accessToken
+
+    const result = await userApi.device.getAllThings()
+    res.json({
+      raw: result,
+      thingList: result?.data?.thingList,
+      total: result?.data?.total,
+      error: result?.error,
+      msg: result?.msg,
+      keys: result ? Object.keys(result) : null,
+    })
+  } catch (err) {
+    console.error('debug error:', err)
+    res.status(500).json({ error: err.message, stack: err.stack })
   }
 })
 
